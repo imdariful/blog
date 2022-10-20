@@ -30,8 +30,8 @@
 
 - [x] **`GET`** : `api/categories/` - Get all categories.
 
-- [] **`GET`** : `api/categories/:id` - Get a category. [***not implimented***]
+- [ ] **`GET`** : `api/categories/:id` - Get a category. [***not implimented***]
 
-- [] **`PUT`** : `api/categories/:id` - Update a category. [***not implimented***]
+- [ ] **`PUT`** : `api/categories/:id` - Update a category. [***not implimented***]
 
-- [] **`DELETE`** :`api/categories/:id` - Delete a category. [***not implimented***]
+- [ ] **`DELETE`** :`api/categories/:id` - Delete a category. [***not implimented***]
