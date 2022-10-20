@@ -15,7 +15,7 @@ const createNewUser = async (req, res) => {
       password: hashedPassword,
     });
     const user = await newUser.save();
-    res.status(200).json({
+    res.status(201).json({
       message:
         'Thanks for signing up. Your account has been created.',
       data: user,
@@ -87,7 +87,7 @@ const updateUser = async (req, res) => {
       });
     } catch (error) {
       res.status(500).json({
-        message: 'We couldn’t save your changes.',
+        message: `We couldn’t save your changes.`,
         data: error,
       });
     }

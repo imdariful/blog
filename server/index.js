@@ -3,18 +3,36 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const mongoose = require('mongoose');
-// import routes
-const blogRoute = require('./routes/blogRoute');
-const authRoute = require('./routes/authRoute');
-const userRoute = require('./routes/userRoute');
-const postRoute = require('./routes/postRoute');
+const multer = require('multer');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 // Middlware
 app.use(express.json());
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'public', 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    const fullName =
+      'blog_' +
+      uuid4().replace(/-/g, '') +
+      path.extname(file.originalname);
+    cb(null, fullName);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 // Routes
-app.use('/api/auth', authRoute);
-app.use('/api/user', userRoute);
-app.use('/api/post', postRoute);
+app.use('/api/auth', require('./routes/authRoute'));
+app.use('/api/user', require('./routes/userRoute'));
+app.use('/api/posts', require('./routes/postRoute'));
+app.use('/api/categories', require('./routes/categoryRoute'));
+app.post('/api/uploads', upload.single('file'), (req, res) => {
+  res.status(200).json({ message: 'File uploaded sucessfully.' });
+});
+
 // Connect to database
 mongoose
   .connect(process.env.MONGO_URL)

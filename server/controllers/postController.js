@@ -7,7 +7,7 @@ const createNewPost = async (req, res) => {
 
   try {
     const savedPost = await newPost.save();
-    res.status(200).json({
+    res.status(201).json({
       message: 'Your post has been successfully shared.',
       data: savedPost,
     });
@@ -103,14 +103,27 @@ const getPost = async (req, res) => {
   }
 };
 
-
 // GET All Post
 const getAllPost = async (req, res) => {
+  const username = req.query.user;
+  const catName = req.query.cat;
   try {
-    const post = await Post.findById(req.params.id);
+    let posts;
+    if (username) {
+      posts = await Post.find({ username });
+    } else if (catName) {
+      posts = await Post.find({
+        categories: {
+          $in: [catName],
+        },
+      });
+    } else {
+      posts = await Post.find();
+    }
+    // const post = await Post.findById(req.params.id);
     res.status(200).json({
-      message: 'User found!',
-      data: post,
+      message: 'All posts fetched sucessfully.',
+      data: posts,
     });
   } catch (error) {
     res.status(500).json({
@@ -125,5 +138,5 @@ module.exports = {
   updatePost,
   deletePost,
   getPost,
-  getAllPost
+  getAllPost,
 };

@@ -1,12 +1,15 @@
 const router = require('express').Router();
 const postController = require('../controllers/postController');
-// Get a user
-router.get('/:id', postController.getPost);
 
-// UPDATE
-router.put('/:id', postController.updatePost);
+router
+  .route('/')
+  .get(postController.getAllPost)
+  .post(postController.createNewPost);
 
-// DELETE
-router.delete('/:id', postController.deletePost);
+router
+  .route('/:id')
+  .get(postController.getPost) // Get a user
+  .put(postController.updatePost) // UPDATE
+  .delete(postController.deletePost); // DELETE
 
 module.exports = router;
