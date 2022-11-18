@@ -1,17 +1,18 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './singlepost.css';
 const SinglePost = () => {
 	const location = useLocation();
 	const path = location.pathname.split('/')[2];
+	const [post, setPost] = useState({});
 
 	useEffect(() => {
 		const getPost = async () => {
 			const response = await axios.get(
-				'http://localhost:8000/posts/' + path
+				'http://localhost:8000/api/posts/' + path
 			);
-			console.log(response);
+			setPost(response.data.data);
 		};
 		getPost();
 	}, []);
@@ -19,13 +20,15 @@ const SinglePost = () => {
 	return (
 		<div className="singlePost">
 			<div className="singlePostWrapper">
-				<img
-					src="https://source.unsplash.com/random"
-					alt=""
-					className="singlePostImg"
-				/>
+				{post.postImg && (
+					<img
+						src={post.postImg}
+						alt=""
+						className="singlePostImg"
+					/>
+				)}
 				<h1 className="singlePostTitle">
-					Lorem ipsum dolor sit amet.
+					{post.title}
 					<div className="singlePostEdit">
 						<i className="singlePostIcon fa-solid fa-pen-to-square"></i>
 						<i className="singlePostIcon fa-solid fa-trash"></i>
@@ -33,17 +36,13 @@ const SinglePost = () => {
 				</h1>
 				<div className="singlePostInfo">
 					<span className="singlePostAuthor">
-						Author: <b>Ariful</b>
+						Author: <b>{post.username}</b>
 					</span>
-					<span className="singlePostDate">1 h ago</span>
+					<span className="singlePostDate">
+						{new Date(post.createdAt).toDateString()}
+					</span>
 				</div>
-				<p className="singlePostDescription">
-					Lorem ipsum dolor sit amet consectetur,
-					adipisicing elit. Vitae nulla impedit sed
-					consequatur iure placeat ducimus eius ad ipsam
-					amet illo dicta, in libero doloribus aspernatur
-					deserunt soluta necessitatibus aperiam!
-				</p>
+				<p className="singlePostDescription">{post.desc}</p>
 			</div>
 		</div>
 	);
